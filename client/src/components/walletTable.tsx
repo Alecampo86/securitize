@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { WalletContext } from "../context/wallet.context";
 
 function WalletTable() {
-  const { wallets, handleWalletDelete } = useContext(WalletContext);
+  const { wallets, handleWalletDelete, fetchWallets } =
+    useContext(WalletContext);
   const [sort, setSort] = useState<"favorites" | "balance">("balance");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [displayCurrency, setDisplayCurrency] = useState<"eur" | "usd">("eur");
@@ -107,7 +108,10 @@ function WalletTable() {
             <td>
               <button
                 className="btn btn-primary"
-                onClick={() => wallet._id && handleWalletDelete(wallet._id)}
+                onClick={async () => {
+                  wallet._id && (await handleWalletDelete(wallet._id));
+                  fetchWallets();
+                }}
               >
                 Delete
               </button>

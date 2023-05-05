@@ -18,6 +18,7 @@ export type WalletContextType = {
   wallets: Wallet[];
   handleWalletAdded: (wallet: Wallet) => void;
   handleWalletDelete: (id: string) => void;
+  fetchWallets: () => void;
   handleSubmit: (event: React.FormEvent) => void;
   warning: string;
   address: string;
@@ -29,6 +30,7 @@ export const WalletContext = createContext<WalletContextType>({
   wallets: [],
   handleWalletAdded: () => {},
   handleWalletDelete: () => {},
+  fetchWallets: () => {},
   handleSubmit: (event: React.FormEvent) => {},
   warning: "",
   address: "",
@@ -46,13 +48,14 @@ export const WalletContextProvider: React.FC<Props> = (props) => {
   const [address, setAddress] = useState("");
 
   useEffect(() => {
-    const fetchWallets = async () => {
-      const response = await fetch(`${baseUrl}/wallet/find`);
-      const data = await response.json();
-      setWallets(data);
-    };
     fetchWallets();
   }, []);
+
+  const fetchWallets = async () => {
+    const response = await fetch(`${baseUrl}/wallet/find`);
+    const data = await response.json();
+    setWallets(data);
+  };
 
   const handleWalletAdded = async (wallet: Wallet) => {
     try {
@@ -69,8 +72,8 @@ export const WalletContextProvider: React.FC<Props> = (props) => {
 
       // Add wallet to the database
       await axios.post(`${baseUrl}/wallet/create`, { ...wallet });
-
       setWallets([...wallets, wallet]);
+      await fetchWallets();
     } catch (error) {
       console.error(error);
     }
@@ -78,8 +81,15 @@ export const WalletContextProvider: React.FC<Props> = (props) => {
 
   const handleWalletDelete = async (id: string) => {
     try {
+      const walletToDelete = wallets.find((wallet) => wallet._id === id);
+      if (!walletToDelete) {
+        return;
+      }
       await axios.delete(`${baseUrl}/wallet/delete/${id}`);
       setWallets(wallets.filter((wallet) => wallet._id !== id));
+      setAddedAddresses(
+        addedAddresses.filter((address) => address !== walletToDelete.address)
+      );
     } catch (error) {
       console.error(error);
     }
@@ -145,6 +155,7 @@ export const WalletContextProvider: React.FC<Props> = (props) => {
         wallets,
         handleWalletAdded,
         handleWalletDelete,
+        fetchWallets,
         handleSubmit,
         warning,
         address,
