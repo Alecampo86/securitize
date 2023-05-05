@@ -1,5 +1,3 @@
-import React from "react";
-
 import AddWalletForm from "./walletInput";
 import WalletTable from "./walletTable";
 
