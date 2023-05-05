@@ -12,6 +12,7 @@ export class EtherscanService {
     const response = await axios.get(url);
     const transactions = response.data.result;
     const oneYearAgo = Math.floor(Date.now() / 1000) - 31536000; // One year ago in Unix timestamp
+
     const isOld = transactions.some(
       (tx) => parseInt(tx.timeStamp) < oneYearAgo,
     );

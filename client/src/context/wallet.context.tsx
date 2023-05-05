@@ -124,6 +124,12 @@ export const WalletContextProvider: React.FC<Props> = (props) => {
               setWarning("");
               setAddedAddresses([...addedAddresses, address]);
               setIsLoading(false);
+            })
+            .catch(() => {
+              setIsLoading(false);
+              setWarning(
+                "There seems to be a problem retrieving transactions with this specific wallet. Please try another."
+              );
             });
         });
       })

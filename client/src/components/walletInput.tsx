@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
-import Spinner from 'react-bootstrap/Spinner';
-import { WalletContext } from '../context/wallet.context';
+import React, { useContext } from "react";
+import Spinner from "react-bootstrap/Spinner";
+import { WalletContext } from "../context/wallet.context";
 
 function AddWalletForm() {
   const { handleSubmit, warning, isLoading, address, setAddress } =
@@ -20,13 +20,9 @@ function AddWalletForm() {
             value={address}
             onChange={(event) => setAddress(event.target.value)}
           />
-          {warning && (
-            <small className="form-text text-muted">
-              This Address has already been added
-            </small>
-          )}
+          {warning && <small className="form-text text-muted">{warning}</small>}
           <button
-            style={{ width: '15%' }}
+            style={{ width: "15%" }}
             type="submit"
             className="btn btn-primary"
             onClick={(e) => handleSubmit(e)}
