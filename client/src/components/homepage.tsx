@@ -4,7 +4,7 @@ import AddWalletForm from "./walletInput";
 import WalletTable from "./walletTable";
 
 function Header() {
-  return <h1>Securitize Wallets Analytics</h1>;
+  return <h1>Securitize Challenge - Wallets Analytics</h1>;
 }
 
 function App() {
